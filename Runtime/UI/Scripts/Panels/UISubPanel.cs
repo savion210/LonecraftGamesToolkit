@@ -1,4 +1,6 @@
+#if DOTWEEN
 using DG.Tweening;
+#endif
 using EventSystem;
 using LonecraftGames.Toolkit.Core.Utilis;
 using UnityEngine;
@@ -47,7 +49,11 @@ namespace LonecraftGames.Toolkit.UI
                 // Set initial alpha to 0 to make it fully transparent
                 canvasGroup.alpha = 0;
 
+#if DOTWEEN
                 canvasGroup.DOFade(1, fadeDuration).SetEase(Ease.Linear);
+#else
+                canvasGroup.alpha = 1;
+#endif
             }
         }
 

@@ -1,6 +1,7 @@
+#if DOTWEEN
 using DG.Tweening;
+#endif
 using EventSystem;
-using LonecraftGames.Toolkit.Core;
 using LonecraftGames.Toolkit.Core.Utilis;
 using UnityEngine;
 
@@ -35,8 +36,11 @@ namespace LonecraftGames.Toolkit.UI
             if (canvasGroup != null)
             {
                 canvasGroup.alpha = 0;
-
+#if DOTWEEN
                 canvasGroup.DOFade(1, fadeDuration).SetEase(Ease.Linear);
+#else
+                canvasGroup.alpha = 1;
+#endif
             }
         }
 

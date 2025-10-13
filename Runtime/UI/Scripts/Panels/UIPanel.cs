@@ -1,6 +1,7 @@
+#if DOTWEEN
 using DG.Tweening;
+#endif
 using EventSystem;
-using LonecraftGames.Toolkit.Core;
 using LonecraftGames.Toolkit.Core.Utilis;
 using UnityEngine;
 
@@ -11,14 +12,14 @@ namespace LonecraftGames.Toolkit.UI
     [AddComponentMenu("LonecraftGames/UI/Panels/UIPanel")]
     public class UIPanel : MonoBehaviour
     {
-        [Header("Panel Type")]
-        public Enums.UIPanelType panelType;
+        [Header("Panel Type")] public Enums.UIPanelType panelType;
 
-        [Header("Event Channels")] 
-        [SerializeField] private PanelTypeEvent onRegisterPanel;
+        [Header("Event Channels")] [SerializeField]
+        private PanelTypeEvent onRegisterPanel;
 
-        [Header("Canvas Group")]
-        [SerializeField] private CanvasGroup canvasGroup;
+        [Header("Canvas Group")] [SerializeField]
+        private CanvasGroup canvasGroup;
+
         [SerializeField] private float fadeDuration = 1f;
 
         private void Start()
@@ -28,9 +29,9 @@ namespace LonecraftGames.Toolkit.UI
 
             onRegisterPanel.Raise(this); // Register the panel
         }
-        
 
-        #region  Functions
+
+        #region Functions
 
         public void Show()
         {
@@ -40,8 +41,11 @@ namespace LonecraftGames.Toolkit.UI
             {
                 // Set initial alpha to 0 to make it fully transparent
                 canvasGroup.alpha = 0;
-                
+#if DOTWEEN
                 canvasGroup.DOFade(1, fadeDuration).SetEase(Ease.Linear);
+#else
+                canvasGroup.alpha = 1;
+#endif
             }
         }
 
@@ -50,13 +54,13 @@ namespace LonecraftGames.Toolkit.UI
             if (canvasGroup != null)
             {
                 // Set initial alpha to 1 to make it fully opaque
-            //   canvasGroup.alpha = 1;
-                
-           //     canvasGroup.DOFade(0, fadeDuration).SetEase(Ease.Linear)
-             //       .OnComplete(() =>
-               //     {
-                        gameObject.SetActive(false);
-               //     });
+                //   canvasGroup.alpha = 1;
+
+                //     canvasGroup.DOFade(0, fadeDuration).SetEase(Ease.Linear)
+                //       .OnComplete(() =>
+                //     {
+                gameObject.SetActive(false);
+                //     });
             }
         }
 
