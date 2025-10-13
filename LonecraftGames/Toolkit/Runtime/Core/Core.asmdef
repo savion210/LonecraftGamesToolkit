@@ -1,0 +1,14 @@
+{
+    "name": "LonecraftGames.Toolkit.Core",
+    "rootNamespace": "LonecraftGames.Toolkit.Core",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

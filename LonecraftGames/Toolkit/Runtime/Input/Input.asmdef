@@ -1,0 +1,17 @@
+{
+    "name": "LonecraftGames.Toolkit.Input",
+    "rootNamespace": "LonecraftGames.Toolkit.Input",
+    "references": [
+        "GUID:1dcbf799149098246bb042e69218ac6f",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

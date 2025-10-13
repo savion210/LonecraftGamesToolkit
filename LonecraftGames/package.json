@@ -1,0 +1,20 @@
+{
+  "name": "com.lonecraftgames.toolkit",
+  "displayName": "Lonecraft Games Toolkit",
+  "version": "1.0.0",
+  "unity": "6000.2.6f1",
+  "description": "A modular toolkit for Unity providing systems like event channels, UI management, save/load, inventory, and more.",
+  "keywords": ["toolkit", "utilities", "event system", "ui", "save system", "inventory"],
+  "category": "Toolkit",
+  "author": {
+    "name": "Lonecraft Games",
+    "email": "support@lonecraftgames.com",
+    "url": "https://lonecraftgames.com"
+  },
+  "changelogUrl": "https://github.com/LonecraftGames/Toolkit/blob/main/CHANGELOG.md",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6",
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}

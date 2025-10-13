@@ -1,0 +1,18 @@
+{
+    "name": "Inventory",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1dcbf799149098246bb042e69218ac6f",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:13d95ffbd7629434fbd8dc325e0a9f45"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

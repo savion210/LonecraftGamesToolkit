@@ -1,0 +1,21 @@
+{
+    "name": "LonecraftGamesToolkit",
+    "rootNamespace": "",
+    "references": [
+        "GUID:24e0e3a1ae62de94b8175972cefe81fe",
+        "GUID:1dcbf799149098246bb042e69218ac6f",
+        "GUID:13d95ffbd7629434fbd8dc325e0a9f45",
+        "GUID:c6cb9b82e8b7983469ed748517d1d4a7",
+        "GUID:c683e619bb51a0644acabd9dc35c3166",
+        "GUID:2ef79f37b426c1a4da5a9a12be2a5521"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

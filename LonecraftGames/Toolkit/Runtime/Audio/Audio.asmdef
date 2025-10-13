@@ -1,0 +1,16 @@
+{
+    "name": "LonecraftGames.Toolkit.Audio",
+    "rootNamespace": "LonecraftGames.Toolkit.Audio",
+    "references": [
+        "GUID:1dcbf799149098246bb042e69218ac6f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
