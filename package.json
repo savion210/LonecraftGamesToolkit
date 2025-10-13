@@ -8,7 +8,6 @@
   "author": { "name": "LoneCraft Games" },
   "dependencies": {
     "com.unity.textmeshpro": "3.0.6",
-    "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.demigiant.dotween": "1.2.765"
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
   }
 }
