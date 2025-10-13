@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "displayName": "Lonecraft Games Toolkit",
   "description": "Toolkit with a ton of starter systems like events, UI handling, inventory and more.",
-  "unity": "6000.2.6f2",
-  "author": {
-    "name": "LoneCraft Games"
-  },
+  "unity": "6000.2",
+  "unityRelease": "6f2",
+  "author": { "name": "LoneCraft Games" },
   "dependencies": {
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.nuget.newtonsoft-json": "3.2.1"
