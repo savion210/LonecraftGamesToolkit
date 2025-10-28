@@ -18,7 +18,13 @@ namespace LonecraftGames.Toolkit.UI
         [Header("Canvas Group")] [SerializeField]
         private CanvasGroup canvasGroup;
 
-        [SerializeField] private float fadeDuration = 1f;
+        [Header("Fade Settings")] [SerializeField]
+        private bool fadeOnShow = true;
+
+        [Header("Fade Duration")] [SerializeField]
+        private float fadeDuration = 1f;
+
+        private Coroutine _fadeCoroutine;
 
         private void Start()
         {
@@ -36,11 +42,14 @@ namespace LonecraftGames.Toolkit.UI
             if (canvasGroup != null)
             {
                 canvasGroup.alpha = 0;
-#if DOTWEEN
-                canvasGroup.DOFade(1, fadeDuration).SetEase(Ease.Linear);
-#else
-                canvasGroup.alpha = 1;
-#endif
+                if (fadeOnShow)
+                {
+                    FadePanel(0f, 1f, fadeDuration);
+                }
+                else
+                {
+                    canvasGroup.alpha = 1;
+                }
             }
         }
 
@@ -48,15 +57,19 @@ namespace LonecraftGames.Toolkit.UI
         {
             if (canvasGroup != null)
             {
-                // Set initial alpha to 1 to make it fully opaque
-                //canvasGroup.alpha = 1;
-
-                //         canvasGroup.DOFade(0, fadeDuration).SetEase(Ease.Linear)
-                //           .OnComplete(() =>
-                //         {
                 gameObject.SetActive(false);
-                //       });
             }
+        }
+
+        private void FadePanel(float startAlpha, float endAlpha, float duration)
+        {
+            if (_fadeCoroutine != null)
+            {
+                StopCoroutine(_fadeCoroutine);
+            }
+
+            _fadeCoroutine =
+                StartCoroutine(PanelFadeRoutine.FadeCanvasGroup(canvasGroup, startAlpha, endAlpha, duration));
         }
 
         #endregion
