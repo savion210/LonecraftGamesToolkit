@@ -27,7 +27,7 @@ namespace LonecraftGames.Toolkit.Save
         /// The password used for encrypting and decrypting data.
         /// This should be kept secret and not exposed to the end user.
         /// </summary>
-        private const string _encryptionKey = "8)*LrH2ljQT2%EPq";
+        private string _encryptionKey;
 
         /// <summary>
         /// Dictionary to cache loaded resources
