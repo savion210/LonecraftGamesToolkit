@@ -121,7 +121,7 @@ namespace LonecraftGames.Toolkit.Save
                 if (isEncrypted)
                 {
                     // If the data is encrypted, decrypt it before deserializing
-                    string encryptedData = DecryptData(filePath, isEncrypted);
+                    string encryptedData = DecryptData(filePath, _encryptionKey);
                     return JsonConvert.DeserializeObject<T>(encryptedData);
                 }
                 else
