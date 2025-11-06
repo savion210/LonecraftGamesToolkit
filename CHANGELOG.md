@@ -5,6 +5,36 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.1.2] - 2025-11-05
+### Changed
+- **Save System Security Update**
+  - Replaced old static encryption password approach with a new flexible `SetPassword()` method.
+  - Added `_encryptionKey` private field to securely store the password used for encryption and decryption.
+  - Updated `Save()` and `Load()` methods to check if `_encryptionKey` is null or empty before attempting encryption/decryption.
+  - Logs a warning when a null or empty password is set, ensuring developer visibility while maintaining flexibility.
+
+### Example
+```csharp
+// NEW: inside SaveSystem.cs
+private string _encryptionKey = "";
+
+/// <summary>
+/// Sets the encryption key to be used for all save and load operations.
+/// This MUST be called before any encryption/decryption is attempted.
+/// </summary>
+/// <param name="password">The password/key to use.</param>
+public void SetPassword(string password)
+{
+    if (string.IsNullOrEmpty(password))
+    {
+        Debug.LogWarning("[SaveSystem] A null or empty password was set.");
+    }
+    _encryptionKey = password;
+}
+```
+
+---
+
 ## [1.1.1] - 2025-10-29
 ### Changed
 - **Dependency Reduction**
@@ -52,3 +82,4 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - `Inventory Base System` (slot-based item management).
 
 ---
+

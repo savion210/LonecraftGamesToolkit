@@ -27,7 +27,7 @@ namespace LonecraftGames.Toolkit.Save
         /// The password used for encrypting and decrypting data.
         /// This should be kept secret and not exposed to the end user.
         /// </summary>
-        private const string Password = "8)*LrH2ljQT2%EPq";
+        private const string _encryptionKey = "8)*LrH2ljQT2%EPq";
 
         /// <summary>
         /// Dictionary to cache loaded resources
@@ -56,6 +56,12 @@ namespace LonecraftGames.Toolkit.Save
             string filePath = GetFilePath(_persistentDataPath, folderName, fileName);
             Debug.Log($"Save path: {filePath}");
 
+            if (isEncryption && string.IsNullOrEmpty(_encryptionKey))
+            {
+                Debug.LogError("[SaveSystem] Save failed! Encryption is enabled but no password was set. Call SetPassword() first, (e.g., in your GameManager's Awake()).");
+                return;
+            }
+
             try
             {
                 // Create the directory if it doesn't exist
@@ -67,7 +73,7 @@ namespace LonecraftGames.Toolkit.Save
                 if (isEncryption)
                 {
                     // If encryption is enabled, encrypt the data before saving
-                    EncryptData(filePath, Password, jsonData);
+                    EncryptData(filePath, _encryptionKey, jsonData);
                 }
                 else
                 {
@@ -106,10 +112,16 @@ namespace LonecraftGames.Toolkit.Save
                 // Combine the persistent data path, folder name, and file name to get the full file path
                 string filePath = Path.Combine(GetFilePath(_persistentDataPath, folderName, fileName));
 
+                if (isEncrypted && string.IsNullOrEmpty(_encryptionKey))
+                {
+                    Debug.LogError("[SaveSystem] Load failed! Encryption is enabled but no password was set. Call SetPassword() first, (e.g., in your GameManager's Awake()).");
+                    return default(T);
+                }
+
                 if (isEncrypted)
                 {
                     // If the data is encrypted, decrypt it before deserializing
-                    string encryptedData = DecryptData(filePath, Password);
+                    string encryptedData = DecryptData(filePath, isEncrypted);
                     return JsonConvert.DeserializeObject<T>(encryptedData);
                 }
                 else
@@ -145,6 +157,12 @@ namespace LonecraftGames.Toolkit.Save
             string path = GetPath(Application.streamingAssetsPath, folderName);
             string filePath = GetFilePath(Application.streamingAssetsPath, folderName, fileName);
 
+            if (isEncryption && string.IsNullOrEmpty(_encryptionKey))
+            {
+                Debug.LogError("[SaveSystem] Save failed! Encryption is enabled but no password was set. Call SetPassword() first, (e.g., in your GameManager's Awake()).");
+                return;
+            }
+
             try
             {
                 // Create the directory if it doesn't exist
@@ -156,7 +174,7 @@ namespace LonecraftGames.Toolkit.Save
                 if (isEncryption)
                 {
                     // If encryption is enabled, encrypt the data before saving
-                    EncryptData(filePath, Password, jsonData);
+                    EncryptData(filePath, _encryptionKey, jsonData);
                 }
                 else
                 {
@@ -193,10 +211,18 @@ namespace LonecraftGames.Toolkit.Save
                 // Combine the StreamingAssets path, folder name, and file name to get the full file path
                 string filePath = Path.Combine(GetFilePath(Application.streamingAssetsPath, folderName, fileName));
 
+                // The new failsafe check
+                if (isEncrypted && string.IsNullOrEmpty(_encryptionKey))
+                {
+                    Debug.LogError("[SaveSystem] Load failed! Encryption is enabled but no password was set. Call SetPassword() first, (e.g., in your GameManager's Awake()).");
+                    return default(T);
+                }
+
+
                 if (isEncrypted)
                 {
                     // If the data is encrypted, decrypt it before deserializing
-                    string encryptedData = DecryptData(filePath, Password);
+                    string encryptedData = DecryptData(filePath, _encryptionKey);
                     return JsonConvert.DeserializeObject<T>(encryptedData);
                 }
                 else
@@ -210,7 +236,7 @@ namespace LonecraftGames.Toolkit.Save
             {
                 // Log any errors that occur during loading and return the default value for the type
                 Debug.LogError($"Error while loading file {fileName}: {ex.Message}");
-                
+
                 return default(T);
             }
         }
@@ -267,7 +293,7 @@ namespace LonecraftGames.Toolkit.Save
                 Resources.UnloadUnusedAssets();
             }
         }
-        
+
         public Dictionary<string, UnityEngine.Object> GetResourceCache()
         {
             return _resourceCache;
@@ -417,6 +443,21 @@ namespace LonecraftGames.Toolkit.Save
                 rng.GetBytes(randomNumber);
                 return randomNumber;
             }
+        }
+
+
+        /// <summary>
+        /// Sets the encryption key to be used for all save and load operations.
+        /// This MUST be called before any encryption/decryption is attempted.
+        /// </summary>
+        /// <param name="password">The password/key to use.</param>
+        public void SetPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                Debug.LogWarning("[SaveSystem] A null or empty password was set.");
+            }
+            _encryptionKey = password;
         }
 
         #endregion
