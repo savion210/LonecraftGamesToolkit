@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LonecraftGames.Toolkit.Core.Utilis;
 using UnityEngine;
 
 namespace LonecraftGames.Toolkit.Gameplay.Interaction
@@ -10,38 +11,44 @@ namespace LonecraftGames.Toolkit.Gameplay.Interaction
         [SerializeField] private float interactRange = 2f;
         public bool currentlyInteracting = false;
 
+        [Header("Filtering Settings")]
+        [Tooltip("The camera transform to use for aiming and visibility checks.")]
+        [SerializeField] private Transform mainCameraTransform;
+
+        [Tooltip("How wide the 'forgiving' cone check is, in degrees.")]
+        [SerializeField] private float viewAngle = 60f;
+
+        [Header("Layer Masks")]
+        [Tooltip("Layers that will block the interaction raycast (e.g., 'Walls', 'Default').")]
+        [SerializeField] private LayerMask obstacleLayerMask;
+
+        [Tooltip("Layers that contain interactable objects. This makes the sphere check much faster.")]
+        [SerializeField] private LayerMask interactableLayerMask;
+
         private IInteractable _currentInteractable;
-        private readonly Collider[] _colliders = new Collider[10]; // Pre-allocated array
+
+        private readonly Collider[] _nearbyColliderBuffer = new Collider[10];
 
 
-        #region Functions
 
-        /// <summary>
-        ///  Handles player interaction with interactable objects.
-        /// </summary>
         public void Interaction()
         {
-            // Deselect the current one, no matter what
             if (_currentInteractable != null)
             {
                 _currentInteractable.Deselect();
                 _currentInteractable = null;
             }
 
-            // Attempt to select a new interactable in range
             IInteractable interactable = GetInteractable();
 
             if (interactable != null)
             {
                 interactable.Interact(transform);
+                currentlyInteracting = true; // Set this flag
                 _currentInteractable = interactable;
             }
         }
 
-
-        /// <summary>
-        ///  Deselects the current interactable object if it exists.
-        /// </summary>
         public void DeselectCurrentInteractable()
         {
             if (_currentInteractable != null)
@@ -49,47 +56,108 @@ namespace LonecraftGames.Toolkit.Gameplay.Interaction
                 _currentInteractable.Deselect();
                 _currentInteractable = null;
             }
+            currentlyInteracting = false; // Clear this flag
+        }
+
+
+        /// <summary>
+        ///  Finds the best interactable object using a two-step process.
+        ///  1. Priotizes the object directly in the center of the screen.
+        ///  2. Falls back to the closest visible object within a cone.
+        /// </summary>
+        /// <returns> The best interactable object, or null if none found.</returns>
+        public IInteractable GetInteractable()
+        {
+            if (mainCameraTransform == null) return null;
+
+            // 1. PRIORITY 1: Try the "Crosshair Aim" (Your idea)
+            if (TryGetAimedInteractable(out IInteractable aimedInteractable))
+            {
+                return aimedInteractable;
+            }
+
+            // 2. PRIORITY 2: Try the "Nearby & Visible" Fallback
+            if (TryGetClosestVisibleInteractable(out IInteractable nearbyInteractable))
+            {
+                return nearbyInteractable;
+            }
+
+            return null;
         }
 
         /// <summary>
-        ///  Finds the closest interactable object within the specified range.
+        ///  Checks for an interactable directly in the center of the screen.
         /// </summary>
-        /// <returns> The closest interactable object, or null if none found.</returns>
-        public IInteractable GetInteractable()
+        private bool TryGetAimedInteractable(out IInteractable interactable)
         {
-            List<IInteractable> interactablesList = new List<IInteractable>();
+            interactable = null;
 
-            int colliderCount = Physics.OverlapSphereNonAlloc(transform.position, interactRange, _colliders);
-            for (int i = 0; i < colliderCount; i++)
+            // Note: We use the obstacleLayerMask here to block the ray
+            if (Physics.Raycast(mainCameraTransform.position, mainCameraTransform.forward,
+                out RaycastHit hit, interactRange, obstacleLayerMask | interactableLayerMask)) // Check against both
             {
-                if (_colliders[i].TryGetComponent(out IInteractable interactable))
+                // We hit something. Now, check if it's on the interactable layer.
+                if (((1 << hit.collider.gameObject.layer) & interactableLayerMask) != 0)
                 {
-                    interactablesList.Add(interactable);
-                }
-            }
-
-            IInteractable closestInteractable = null;
-
-            foreach (IInteractable interactables in interactablesList)
-            {
-                if (closestInteractable == null)
-                {
-                    closestInteractable = interactables;
-                }
-                else
-                {
-                    if (Vector3.Distance(transform.position, interactables.GetTransform().position)
-                        < Vector3.Distance(transform.position, closestInteractable.GetTransform().position))
+                    // It's on the right layer, so it *must* have the component (or setup is wrong)
+                    if (hit.collider.TryGetComponent(out interactable))
                     {
-                        closestInteractable = interactables;
+                        return true;
                     }
                 }
             }
-
-            return closestInteractable;
+            return false;
         }
 
-        #endregion
-        
+        /// <summary>
+        ///  Finds the closest interactable object within a sphere that is also visible.
+        /// </summary>
+        private bool TryGetClosestVisibleInteractable(out IInteractable interactable)
+        {
+            interactable = null;
+            float closestDistance = float.MaxValue;
+
+            Vector3 cameraPosition = mainCameraTransform.position;
+            Vector3 cameraForward = mainCameraTransform.forward;
+
+            // Use the dedicated interactableLayerMask for a massive performance boost
+            int hitCount = Physics.OverlapSphereNonAlloc(
+                transform.position, interactRange, _nearbyColliderBuffer, interactableLayerMask);
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                Collider col = _nearbyColliderBuffer[i];
+                if (!col.TryGetComponent(out IInteractable nearbyInteractable))
+                {
+                    continue;
+                }
+
+                Vector3 targetPosition = col.transform.position;
+                float distanceToTarget = Vector3.Distance(cameraPosition, targetPosition);
+
+                // 1. Check Field of View (FOV)
+                if (!MathUtils.IsWithinViewAngle(cameraPosition, cameraForward, targetPosition, viewAngle))
+                {
+                    continue; // Not in view cone
+                }
+
+                // 2. Check Line of Sight (LOS)
+                Vector3 directionToTarget = (targetPosition - cameraPosition).normalized;
+                if (Physics.Raycast(cameraPosition, directionToTarget, distanceToTarget, obstacleLayerMask))
+                {
+                    continue; // Something is blocking the view
+                }
+
+                // 3. Check if it's the closest one so far
+                if (distanceToTarget < closestDistance)
+                {
+                    closestDistance = distanceToTarget;
+                    interactable = nearbyInteractable;
+                }
+            }
+
+            return interactable != null;
+        }
+
     }
 }

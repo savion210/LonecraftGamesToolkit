@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
+## [1.1.3] - 2025-11-07
+### Changed
+- **Interaction System Refinement**
+  - Replaced the simple `OverlapSphere` check in `PlayerInteract.cs` with a more robust, performant, and intuitive hybrid system.
+  - The system now performs a "Crosshair Raycast" as its first priority, allowing for fast and precise selection of the object the player is aiming at.
+  - If the crosshair raycast misses, the system falls back to a "Nearby Object" check.
+  - This fallback check is now heavily filtered using `MathUtils` helpers to find the closest object that is **within the player's view angle (FOV)** and has a **clear line of sight (LOS)**, preventing interaction through walls or with objects behind the player.
+  - Added `interactableLayerMask` and `obstacleLayerMask` fields to `PlayerInteract.cs` to dramatically optimize physics queries in both checks.
+
+---
 
 ## [1.1.2] - 2025-11-05
 ### Changed
