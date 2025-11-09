@@ -12,38 +12,54 @@ namespace LonecraftGames.Toolkit.UI
     [AddComponentMenu("LonecraftGames/UI/User Interface Manager")]
     public class UserInterfaceManager : MonoBehaviour
     {
-        [Header("Current Panel/ Previous Panel")] [SerializeField]
+        public Enums.UIPanelType CurrentPanel => currentPanel;
+        public Enums.UIPanelType PreviousPanel => previousPanel;
+
+        public Enums.SubPanelType CurrentSubPanel => currentSubPanel;
+        public Enums.SubPanelType PreviousSubPanel => previousSubPanel;
+
+        public Enums.UIPopupType CurrentPopup => currentPopup;
+        public Enums.UIPopupType PreviousPopup => previousPopup;
+
+        [Header("Current Panel/ Previous Panel")]
+        [SerializeField]
         private Enums.UIPanelType currentPanel;
 
         [SerializeField] private Enums.UIPanelType previousPanel;
 
-        [Header("Current SubPanel/ Previous SubPanel")] [SerializeField]
+        [Header("Current SubPanel/ Previous SubPanel")]
+        [SerializeField]
         private Enums.SubPanelType currentSubPanel;
 
         [SerializeField] private Enums.SubPanelType previousSubPanel;
 
-        [Header("Current Popup/ Previous Popup")] [SerializeField]
+        [Header("Current Popup/ Previous Popup")]
+        [SerializeField]
         private Enums.UIPopupType currentPopup;
 
         [SerializeField] private Enums.UIPopupType previousPopup;
 
-        [Header("Panel Event Channels")] [SerializeField]
+        [Header("Panel Event Channels")]
+        [SerializeField]
         private PanelTypeEvent onRegisterPanel;
 
         [SerializeField] private PanelEnumEvent onPanelChange;
 
-        [Header("SubPanel Event Channels")] [SerializeField]
+        [Header("SubPanel Event Channels")]
+        [SerializeField]
         private SubPanelTypeEvent onRegisterSubPanel;
 
         [SerializeField] private SubPanelEnumEvent onSubPanelChange;
 
-        [Header("Popup Event Channels")] [SerializeField]
+        [Header("Popup Event Channels")]
+        [SerializeField]
         private PopupTypeEvent onRegisterPopup;
 
         [SerializeField] private PopupEnumEvent onPopupChange;
 
 
-        [Header("UI Panels/Popups/Subpanels")] [SerializeField]
+        [Header("UI Panels/Popups/Subpanels")]
+        [SerializeField]
         private List<UIPanel> panels = new List<UIPanel>();
 
         [SerializeField] private List<UISubPanel> subPanels = new List<UISubPanel>();
