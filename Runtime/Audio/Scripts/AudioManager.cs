@@ -123,6 +123,7 @@ namespace LonecraftGames.Toolkit.Audio
 
         public void UpdateVolume(Enums.SoundCategory category, float volume)
         {
+            if (volume > 1f) volume /= 100f;
             switch (category)
             {
                 case Enums.SoundCategory.Master:
