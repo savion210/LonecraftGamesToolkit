@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
+## [1.1.4] - 2025-12-01
+### Changed
+- **Event Editor**
+  - Editor of all event SO's in project and can create new ones and inspect where each is located.
+  - Game state manager updated to handle mouse settings and an option to use timescale for pause menus.
+---
 ## [1.1.3] - 2025-11-07
 ### Changed
 - **Interaction System Refinement**
