@@ -34,6 +34,8 @@ namespace LonecraftGames.Toolkit.Core.Utilis
             LobbyJoin = 8,
             VivoxSettings = 9,
             SaveMenu = 10,
+            LoadMenu = 11,
+            UpgradeMenu = 12,
         }
 
         public enum UIPopupType
@@ -43,6 +45,7 @@ namespace LonecraftGames.Toolkit.Core.Utilis
             LobbyJoin = 2,
             EULA = 3,
             PrivacyPolicy = 4,
+            Confirmation = 5,
         }
 
         public enum GraphicsQuality
