@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using System.Linq;
 using LonecraftGames.Toolkit.Core.Events;
 using UnityEditor;
@@ -224,3 +225,4 @@ namespace LonecraftGames.Toolkit.Core.Editor
         }
     }
 }
+#endif
