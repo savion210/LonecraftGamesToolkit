@@ -19,7 +19,7 @@ namespace LonecraftGames.Toolkit.Audio
         [Header("Event Channels")]
         [SerializeField]
         private SoundEventChannel soundEventChannel;
-        private OneShotSoundEventChannel oneShotSoundEventChannel;
+        [SerializeField] private OneShotSoundEventChannel oneShotSoundEventChannel;
         [SerializeField] private StopAudioEvent stopAudioEvent;
 
         private Dictionary<string, AudioSource> _soundSources = new Dictionary<string, AudioSource>();
