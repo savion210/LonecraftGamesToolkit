@@ -16,8 +16,10 @@ namespace LonecraftGames.Toolkit.Audio
 
         [Header("Sounds")] [SerializeField] private List<Sound> sounds = new List<Sound>();
 
-        [Header("Event Channels")] [SerializeField]
+        [Header("Event Channels")]
+        [SerializeField]
         private SoundEventChannel soundEventChannel;
+        private OneShotSoundEventChannel oneShotSoundEventChannel;
         [SerializeField] private StopAudioEvent stopAudioEvent;
 
         private Dictionary<string, AudioSource> _soundSources = new Dictionary<string, AudioSource>();
@@ -26,18 +28,25 @@ namespace LonecraftGames.Toolkit.Audio
         private void OnEnable()
         {
             soundEventChannel.RegisterListener(PlaySoundEvent);
+            oneShotSoundEventChannel.RegisterListener(PlayOneShotSoundEvent);
             stopAudioEvent.RegisterListener(StopSoundEvent);
         }
 
         private void OnDisable()
         {
             soundEventChannel.UnregisterListener(PlaySoundEvent);
+            oneShotSoundEventChannel.UnregisterListener(PlayOneShotSoundEvent);
             stopAudioEvent.UnregisterListener(StopSoundEvent);
         }
 
         private void PlaySoundEvent(SoundEventData eventData)
         {
             Play(eventData.soundName.ToString(), eventData.position);
+        }
+
+        private void PlayOneShotSoundEvent(SoundEventData eventData)
+        {
+            PlayOneShot(eventData.soundName.ToString(), eventData.position);
         }
         private void StopSoundEvent(string eventData)
         {
@@ -83,6 +92,23 @@ namespace LonecraftGames.Toolkit.Audio
                 }
 
                 source.Play();
+            }
+            else
+            {
+                Debug.LogWarning($"Sound {soundName} not found!");
+            }
+        }
+
+        private void PlayOneShot(string soundName, Vector3 position = default)
+        {
+            if (_soundSources.TryGetValue(soundName, out var source))
+            {
+                if (source.spatialBlend > 0 && position != default)
+                {
+                    source.transform.position = position;
+                }
+
+                source.PlayOneShot(source.clip, source.volume);
             }
             else
             {
