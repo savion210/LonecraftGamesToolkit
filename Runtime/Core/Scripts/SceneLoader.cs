@@ -12,11 +12,12 @@ namespace LonecraftGames.Toolkit.Core
             GameScene,
             LoaderScene,
             StartupScene,
+            Level0
         }
 
         public enum LevelScene
         {
-            Level0
+            Level0,
             LevelOne,
             LevelTwo,
             LevelThree,
