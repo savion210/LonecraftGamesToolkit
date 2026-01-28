@@ -142,19 +142,14 @@ namespace LonecraftGames.Toolkit.Core.Utilis
             Ambience2,
             BackgroundMusic1,
             BackgroundMusic2,
-            BloodDrip,
-            Breath1,
-            Breath2,
-            EvilLaugh,
             MaleScream1,
             MaleScream2,
             MonsterGrowl1,
             MonsterGrowl2,
-            WolfHowl,
-            WolfBreathing,
-            WolfRunning,
-            WolfAttack,
-        
+            HitEffect1,
+            HitEffect2,
+            HitEffect3
+
         }
         
         public enum SoundCategory

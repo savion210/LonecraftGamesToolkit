@@ -16,6 +16,7 @@ namespace LonecraftGames.Toolkit.Core
 
         public enum LevelScene
         {
+            Level0
             LevelOne,
             LevelTwo,
             LevelThree,
