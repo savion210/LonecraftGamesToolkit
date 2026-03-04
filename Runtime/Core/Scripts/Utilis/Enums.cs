@@ -19,6 +19,7 @@ namespace LonecraftGames.Toolkit.Core.Utilis
             ReadyUp = 12,
             LevelPanel = 13,
             LoadMenu = 14,
+            GameOver = 15,
         }
 
         public enum SubPanelType
